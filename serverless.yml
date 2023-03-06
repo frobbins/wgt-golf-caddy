@@ -1,0 +1,76 @@
+service: golf-caddy
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:123456789012:table/swing"
+  environment:
+    SWING_TABLE: ${self:service}-swings-${self:provider.stage}
+resources:
+  Resources:
+    SwingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.SWING_TABLE}
+functions:
+  createSwing:
+    handler: src/handlers/createSwing.createSwing
+    events:
+      - http:
+          path: swing
+          method: post
+          cors: true
+    tracing: true    
+  deleteSwing:
+    handler: src/handlers/deleteSwing.deleteSwing
+    events:
+      - http:
+          path: swing/{swingId}
+          method: delete
+          cors: true
+    tracing: true 
+  getSwings:
+    handler: src/handlers/getSwings.getSwings
+    events:
+      - http:
+          path: swing
+          method: get
+          cors: true
+    tracing: true        
+  getSwing:
+    handler: src/handlers/getSwing.getSwing
+    events:
+      - http:
+          path: swing/{swingId}
+          method: get
+          cors: true
+    tracing: true    
+  updateSwing:
+    handler: src/handlers/updateSwing.updateSwing
+    events:
+      - http:
+          path: swing/{swingId}
+          method: put
+          cors: true
+    tracing: true   
