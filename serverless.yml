@@ -17,7 +17,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-1:123456789012:table/swing"
+      Resource: "arn:aws:dynamodb:us-east-1:345598404247:table/golf-caddy-swings-dev"
   environment:
     SWING_TABLE: ${self:service}-swings-${self:provider.stage}
 resources:
@@ -41,7 +41,7 @@ functions:
           path: swing
           method: post
           cors: true
-    tracing: true    
+    tracing: true
   deleteSwing:
     handler: src/handlers/deleteSwing.deleteSwing
     events:
@@ -49,7 +49,7 @@ functions:
           path: swing/{swingId}
           method: delete
           cors: true
-    tracing: true 
+    tracing: true
   getSwings:
     handler: src/handlers/getSwings.getSwings
     events:
@@ -57,7 +57,7 @@ functions:
           path: swing
           method: get
           cors: true
-    tracing: true        
+    tracing: true
   getSwing:
     handler: src/handlers/getSwing.getSwing
     events:
@@ -65,7 +65,7 @@ functions:
           path: swing/{swingId}
           method: get
           cors: true
-    tracing: true    
+    tracing: true
   updateSwing:
     handler: src/handlers/updateSwing.updateSwing
     events:
@@ -73,4 +73,4 @@ functions:
           path: swing/{swingId}
           method: put
           cors: true
-    tracing: true   
+    tracing: true
